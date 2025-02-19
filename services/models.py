@@ -59,11 +59,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
-    def generate_registration_number(self, group_name):
-        """Gera um número de matrícula único baseado no grupo ('M' para médicos, 'F' para funcionários)."""
-        prefix = "M" if group_name == "Médico" else "F" if group_name == "Funcionário" else "U"
-        while True:
-            random_number = ''.join(random.choices(string.digits, k=7))
-            registration_number = f"{prefix}{random_number}"
-            if not User.objects.filter(registration=registration_number).exists():
-                return registration_number
+    
+    def save(self):
+        prefix = None
+        # Determina o prefixo de acordo com o grupo do usuário
+        if self.groups.name == "Médico":
+            prefix = "M"
+        else: 
+            prefix = "F" 
+            
+        
+        random_number = ''.join(random.choices(string.digits, k=7))
+        registration_number = f"{prefix}{random_number}"
+    
+        if not User.objects.filter(registration=registration_number).exists():
+            self.registration = registration_number
+    
+        return super().save()
+
