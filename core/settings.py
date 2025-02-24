@@ -27,7 +27,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'services'
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'services',
+    
 ]
 
 MIDDLEWARE = [
@@ -119,3 +122,22 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Suppressing security warnings related to static files in development environment
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": SECRET_KEY
+}
