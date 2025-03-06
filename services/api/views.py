@@ -22,8 +22,8 @@ def log_action(request, obj, action_flag, message):
 
 class BaseViewSet(viewsets.ModelViewSet):
     """Base ViewSet para adicionar registro de LogEntry em cada ação."""
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         instance = serializer.save()
