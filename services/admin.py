@@ -29,7 +29,7 @@ class PacienteAdmin(admin.ModelAdmin):
 
 @admin.register(Prontuario)
 class ProntuarioAdmin(admin.ModelAdmin):
-    list_display = ('paciente', 'temperatura', 'pressao', 'oxigenacao', 'peso', 'uso_medicamentos', 'alergias')
+    list_display = ('paciente', 'temperatura', 'pressao', 'oxigenacao', 'peso', 'uso_medicamentos', 'alergias', 'data_criacao')
     search_fields = ('paciente__nome',)
     list_filter = ('uso_medicamentos', 'alergias')
 

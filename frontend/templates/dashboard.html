@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <header class="bg-gray-800 text-white p-6 text-center text-2xl font-bold shadow-md">
+        Dashboard de Chamados
+    </header>
+    <main class="max-w-6xl mx-auto my-8 space-y-8">
+        <section>
+            <h2 class="text-xl font-semibold mb-4">Chamado Ativo</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md w-fit border border-gray-300">
+                <div class="flex space-x-2"><span class="text-blue-600 font-semibold">Paciente:</span> <span>{{ chamado_atual.paciente }}</span></div>
+                <div class="flex space-x-2"><span class="text-red-600 font-semibold">Médico:</span> <span>{{ chamado_atual.medico }}</span></div>
+                <div class="flex space-x-2"><span class="text-purple-600 font-semibold">Especialidade:</span> <span>{{ chamado_atual.medico.especialidade }}</span></div>
+                <div class="flex space-x-2"><span class="text-green-600 font-semibold">Hora:</span> <span>{{ chamado_atual.hora }}</span></div>
+            </div>
+        </section>
+        <section>
+            <h2 class="text-xl font-semibold mb-4">Últimas Chamadas</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {% for chamado in ultimas_chamadas %}
+                <div class="bg-white p-4 rounded-lg shadow-md w-fit border border-gray-300">
+                    <div class="flex space-x-2"><span class="text-blue-600 font-semibold">Paciente:</span> <span>{{ chamado.paciente }}</span></div>
+                    <div class="flex space-x-2"><span class="text-red-600 font-semibold">Médico:</span> <span>{{ chamado.medico }}</span></div>
+                    <div class="flex space-x-2"><span class="text-purple-600 font-semibold">Especialidade:</span> <span>{{ chamado.medico.especialidade }}</span></div>
+                    <div class="flex space-x-2"><span class="text-green-600 font-semibold">Dia:</span> <span>{{ chamado.data_agendamento }}</span></div>
+                    <div class="flex space-x-2"><span class="text-green-600 font-semibold">Hora:</span> <span>{{ chamado.hora }}</span></div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h2 class="text-xl font-semibold mb-4">Níveis de Urgência</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div class="p-4 rounded-lg shadow-md text-white bg-red-600">Emergência: {{ emergencia }}</div>
+                <div class="p-4 rounded-lg shadow-md text-white bg-orange-500">Muito Urgente: {{ muito_urgente }}</div>
+                <div class="p-4 rounded-lg shadow-md text-black bg-yellow-300">Urgente: {{ urgente }}</div>
+                <div class="p-4 rounded-lg shadow-md text-black bg-blue-300">Pouco Urgente: {{ pouco_urgente }}</div>
+                <div class="p-4 rounded-lg shadow-md text-white bg-green-600">Não Urgente: {{ nao_urgente }}</div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

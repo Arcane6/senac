@@ -55,7 +55,6 @@ class Paciente(models.Model):
 
     nome = models.CharField(max_length=255)
     documento = models.CharField(max_length=50) # CPF
-    urgencia = models.CharField(max_length=50)
     naturalidade = models.CharField(max_length=100)
     nacionalidade = models.CharField(max_length=100)
     responsavel = models.CharField(max_length=255, null=True, blank=True) # Se menor de idade ou incapaz
@@ -74,34 +73,8 @@ class Paciente(models.Model):
     def __str__(self):
         return self.nome
 
-class Prontuario(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    temperatura = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    pressao = models.CharField(max_length=20, null=True, blank=True)
-    oxigenacao = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    uso_medicamentos = models.BooleanField()
-    descricao_medicamentos = models.TextField(null=True, blank=True)
-    alergias = models.BooleanField()
-    descricao_alergias = models.TextField(null=True, blank=True)
-    sintomas = models.TextField()
 
-    def __str__(self):
-        return f'Prontuário de {self.paciente.nome}'
 
-class Prescricao(models.Model):
-    prontuario = models.ForeignKey(Prontuario, on_delete=models.CASCADE)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return f'Prescrição de {self.prontuario.paciente.nome}'
-
-class Diagnostico(models.Model):
-    prontuario = models.ForeignKey(Prontuario, on_delete=models.CASCADE)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return f'Diagnóstico de {self.prontuario.paciente.nome}'
 
 class Especialidade(models.Model):
     nome = models.CharField(max_length=100)
@@ -117,18 +90,40 @@ class Medico(models.Model):
     telefone = models.CharField(max_length=20)
     email = models.EmailField()
 
+    def __str__(self):
+        return self.nome
+
 class Agendamento(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     data_agendamento = models.DateField()
     hora = models.TimeField()
     observacoes = models.TextField(null=True, blank=True)
+    status = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('medico', 'data_agendamento', 'hora')
 
     def __str__(self):
         return f'Agendamento de {self.paciente.nome} com {self.medico.nome} em {self.data_agendamento} às {self.hora}'
+
+class Prontuario(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    agendamento = models.ForeignKey(Agendamento, on_delete=models.SET_NULL, null=True, blank=True)
+    urgencia = models.CharField(max_length=50, default='NÃO URGENTE', choices=(('NÃO URGENTE','NÃO URGENTE'), ('POUCO URGENTE','POUCO URGENTE'),('URGENTE','URGENTE'), ('MUITO URGENTE','MUITO URGENTE'), ('EMERGENCIA','EMERGENCIA')))
+    temperatura = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    pressao = models.CharField(max_length=20, null=True, blank=True)
+    oxigenacao = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    uso_medicamentos = models.BooleanField()
+    descricao_medicamentos = models.TextField(null=True, blank=True)
+    alergias = models.BooleanField()
+    descricao_alergias = models.TextField(null=True, blank=True)
+    sintomas = models.TextField()
+    data_criacao = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Prontuário de {self.paciente.nome}'
 
 class Exame(models.Model):
     nome = models.CharField(max_length=150)
@@ -142,3 +137,17 @@ class Requisicao(models.Model):
 
     def __str__(self):
         return f'Requisição de {self.prontuario.paciente.nome} com {self.exames.count()} exame(s)'
+
+class Prescricao(models.Model):
+    prontuario = models.ForeignKey(Prontuario, on_delete=models.CASCADE)
+    descricao = models.TextField()
+
+    def __str__(self):
+        return f'Prescrição de {self.prontuario.paciente.nome}'
+
+class Diagnostico(models.Model):
+    prontuario = models.ForeignKey(Prontuario, on_delete=models.CASCADE)
+    descricao = models.TextField()
+
+    def __str__(self):
+        return f'Diagnóstico de {self.prontuario.paciente.nome}'
