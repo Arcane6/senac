@@ -7,17 +7,17 @@ from . import serializers
 
 
 
-def log_action(request, obj, action_flag, message):
-    """Registra a ação no LogEntry."""
-    user = request.user if request and request.user.is_authenticated else None
-    LogEntry.objects.log_action(
-        user_id=user.id if user else None,
-        content_type_id=None,
-        object_id=obj.id,
-        object_repr=str(obj),
-        action_flag=action_flag,
-        change_message=message
-    )
+# def log_action(request, obj, action_flag, message):
+#     """Registra a ação no LogEntry."""
+#     user = request.user if request and request.user.is_authenticated else None
+#     LogEntry.objects.log_action(
+#         user_id=user.id if user else None,
+#         content_type_id=None,
+#         object_id=obj.id,
+#         object_repr=str(obj),
+#         action_flag=action_flag,
+#         change_message=message
+#     )
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -25,17 +25,17 @@ class BaseViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        log_action(self.request, instance, ADDITION, 'Objeto criado.')
+    # def perform_create(self, serializer):
+    #     instance = serializer.save()
+    #     log_action(self.request, instance, ADDITION, 'Objeto criado.')
 
-    def perform_update(self, serializer):
-        instance = serializer.save()
-        log_action(self.request, instance, CHANGE, 'Objeto atualizado.')
+    # def perform_update(self, serializer):
+    #     instance = serializer.save()
+    #     log_action(self.request, instance, CHANGE, 'Objeto atualizado.')
 
-    def perform_destroy(self, instance):
-        log_action(self.request, instance, DELETION, 'Objeto excluído.')
-        instance.delete()
+    # def perform_destroy(self, instance):
+    #     log_action(self.request, instance, DELETION, 'Objeto excluído.')
+    #     instance.delete()
 
 
 class PacienteViewSet(BaseViewSet):
