@@ -140,3 +140,11 @@ python manage.py runserver
 
 ---
 
+## Contribuidores
+
+[ANTONIO GABRIEL DE OLIVEIRA](https://github.com/Arcane6)  
+[BIANCA SILVA BARCELOS](https://github.com/BiancaBarcelos)  
+[DIEGO DE LIMA FOGACA](https://github.com/DiFogaca)  
+[KLEVERTON MACHADO KULMANN](https://github.com/KlevertonMKulmann)  
+[LEILANE CATHERINE JOHN HIRT](https://github.com/leilanehirt)  
+[MANOELA DE ARAUJO CUNTIN HARRISON](https://github.com/Manoelah20)
